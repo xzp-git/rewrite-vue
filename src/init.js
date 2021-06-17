@@ -1,5 +1,5 @@
 import { initState } from './state'
-import { compileToFunction } form './compiler/index'
+import { compileToFunction } from './compiler/index'
 
 
 export function initMixin(Vue){

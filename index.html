@@ -6,8 +6,13 @@
   <title>rewrite-vue</title>
 </head>
 <body>
-  <div id="app">
-    <h1>{{name}}</h1>
+  <div id="app" name="abc" style="background-color: red; color:black">
+    <h6 title="name">{{name}}</h6>
+    <ul>
+      <li foo="baz">
+        {{foo.bar}}
+      </li>
+    </ul>
   </div>
   <script src="./dist/vue.js"></script>
   <script>

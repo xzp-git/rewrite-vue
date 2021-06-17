@@ -1,9 +1,8 @@
-
+import { parserHTML } from "./parser"
 
 
 
 export function compileToFunction(template){
-  console.log(template)
-  // let root = parserHTML(template)
-
+  let root = parserHTML(template)
+  console.log(root)
 }
