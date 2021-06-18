@@ -6,6 +6,7 @@
   <title>rewrite-vue</title>
 </head>
 <body>
+  
   <div id="app" name="abc" style="background-color: red; color:black">
     <h6 title="name">hello,{{name}}world</h6>
     <ul>
@@ -14,6 +15,7 @@
       </li>
     </ul>
   </div>
+
   <script src="./dist/vue.js"></script>
   <script>
     let vm = new Vue({
@@ -33,6 +35,10 @@
         ]
       }
     })
+    setTimeout(()=> {
+      vm.name = "jiayou"
+      console.log('更新')
+    },2000)
   </script>
 </body>
 </html>
