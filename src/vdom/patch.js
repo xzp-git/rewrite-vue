@@ -19,9 +19,75 @@ export function patch(oldVnode,vnode){
     parentElm.insertBefore(elm, oldVnode.el.nextSibling)
     parentElm.removeChild(oldVnode.el)
     return elm
+
+
+
+    if(oldVnode.tag !== vnode.tag){
+      return oldVnode.el.parentNode.replaceChild(createElm(vnode),oldVnode.el)
+    }
+    let el = vnode.el = oldVnode.el
+
+    if(vnode.tag == undefined){
+      if(oldVnode.text!==vnode.text){
+        return el.textCount = vnode.text
+      }
+    }
+    // 如果标签一样比较属性
+    let oldProps = oldVnode.data
+    patchProps(vnode, oldProps)
+    // 属性可能有删除的情况
+
+    let oldChildren = oldVnode.children || []
+    let newChildren = vnode.children || []
+    if(oldChildren.length > 0 && newChildren.length > 0){
+      patchChildren(el,oldChildren, newChildren)
+    }else if(newChildren.length > 0){
+      for(let i = 0; i < newChildren.length; i++){
+        const child = createElm(newChildren[i])
+        el.appendChild(child)
+      }
+    }else if(oldChildren.length > 0){
+      el.innerHTML = ``
+    }
+    return el
   }
 }
+function isSameVnode(oldVnode,newVnode){
+  return (oldVnode.tag == newVnode.tag) && (oldVnode.key == newVnode.key)
+}
+function patchChildren(el, oldChildren, newChildren){
+  let oldStartIndex = 0
+  let oldStartVnode = oldChildren[0]
+  let oldEndIndex = oldChildren.length - 1
+  let oldEndVnode = oldChildren[oldEndIndex] 
 
+  let newStartIndex = 0
+  let newStartVnode = newChildren[0]
+  let newEndIndex = newChildren.length - 1
+  let newEndVnode = newChildren[oldEndIndex] 
+  
+  while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex){
+    
+    //同时循环新的节点和老的节点 有一方循环完毕就结束
+    if(isSameVnode(oldStartVnode, newStartVnode)){
+      patch(oldStartVnode,newStartVnode)
+      oldStartVnode = oldChildren[++oldStartIndex]
+      newStartVnode = newChildren[++newStartIndex]
+    }else if(isSameVnode(oldEndVnode, newEndVnde)){
+      patch(oldEndVnode,newEndVnode)
+      oldEndVnode = oldChildren[--newEndIndex]
+      newEndVnode = newChildren[--newEndVnode]
+    }else if(isSameVnode(oldStartVnode,newEndVnode){
+      // 头尾比较
+      patch(oldStartVnode,newEndVnode)
+      el.insertBefore(oldStartVnode.el, oldEndVnode.el.nextSibling)
+      oldStartVnode = oldChildren[++oldStartIndex]
+      newEndVnode = newChildren[--newEndIndex]
+    })else if(isSameVnode(oldEndVnode,newStartVnode)){
+      
+    }
+  }
+}
 
 
 function patchProps(vnode, oldProps = {}){

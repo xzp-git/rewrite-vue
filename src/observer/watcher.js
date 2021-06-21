@@ -1,5 +1,5 @@
 import {popTarget, pushTarget} from './dep'
-
+import {queueWatcher} from './scheduler'
 let id = 0 
 
 class Watcher{
@@ -32,13 +32,11 @@ class Watcher{
   }
 
   update(){
-    debugger
-    this.get()
-    // if(this.lazy){
-    //   this.dirty = true
-    // }else{
-    //   queueWatcher
-    // }
+    if(this.lazy){
+      this.dirty = true
+    }else{
+      queueWatcher(this)
+    }
   }
 
   addDep(dep){
@@ -56,7 +54,9 @@ class Watcher{
       this.deps[i].depend()
     }
   }
-
+  run(){
+    this.get()
+  }
 
   
 }
