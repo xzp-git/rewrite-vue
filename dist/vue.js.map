@@ -1,0 +1,1 @@
+{"version":3,"file":"vue.js","sources":["../src/index.js"],"sourcesContent":["let title = 'Vue'\r\n//# sourceMappingURL=vue.js.map\r\nexport default title"],"names":["title"],"mappings":";;;;;;KAAIA,KAAK,GAAG;;;;;;;;"}
