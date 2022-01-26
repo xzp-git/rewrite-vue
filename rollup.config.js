@@ -1,7 +1,5 @@
 import {babel} from '@rollup/plugin-babel'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
-const path = require('path')
-console.log(path.resolve(__dirname,'public/index.html'));
 
 export default {
   input:'./src/index.js',
