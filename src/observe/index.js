@@ -1,6 +1,10 @@
 class Observe{
   constructor(data){
-    this.walk(data)
+    if (Array.isArray(data)) {
+      
+    }else{
+      this.walk(data)
+    }
   }
 
   walk(data){
@@ -10,6 +14,7 @@ class Observe{
 
 
 export function defineReactive(target, key, value) {
+  observe(value)
   Object.defineProperty(target, key, {
     get(){
       console.log('劫持用户的取值操作，get');
@@ -18,6 +23,7 @@ export function defineReactive(target, key, value) {
     set(newValue){
       if (newValue !== value) {
       console.log('劫持用户的设置操作，set');
+      observe(newValue)
         value = newValue
       }
     }
