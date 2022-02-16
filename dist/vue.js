@@ -92,6 +92,7 @@
   }();
 
   function defineReactive(target, key, value) {
+    observe(value);
     Object.defineProperty(target, key, {
       get: function get() {
         console.log('劫持用户的取值操作，get', key);
@@ -100,6 +101,7 @@
       set: function set(newValue) {
         if (newValue !== value) {
           console.log('劫持用户的设置操作，set');
+          observe(newValue);
           value = newValue;
         }
       }
@@ -127,7 +129,25 @@
     var data = vm.$options.data;
     data = typeof data === 'function' ? data.call(vm) : data;
     vm._data = data;
+    proxy(vm, '_data');
     observe(data);
+  }
+
+  function proxy(vm, target) {
+    var _loop = function _loop(key) {
+      Object.defineProperty(vm, key, {
+        get: function get() {
+          return vm[target][key];
+        },
+        set: function set(newValue) {
+          vm[target][key] = newValue;
+        }
+      });
+    };
+
+    for (var key in vm[target]) {
+      _loop(key);
+    }
   }
 
   function initMixin(Vue) {
