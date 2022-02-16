@@ -11,11 +11,14 @@
   <script src="./vue.js"></script>
   <script>
     const vm = new Vue({
+      el:'#app',
       data:{
         name:'vue2',
-        age:3
+        age:3,
+        hobby:['eat', 'drink', {a:1}]
       }
     })
+    vm.hobby.push(1)
   </script>
 </body>
 </html>
