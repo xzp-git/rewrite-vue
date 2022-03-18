@@ -27,21 +27,46 @@
   </style>
 </head>
 <body>
-  <div id="app" style="background-color: cyan;width: 300px;height: 100px;"><div style="color: red;">
-    hello {{name}}  hello {{name}}
-    </div>
-    <span>hello aaa{{age}}</span>
+  <div id="app" style="background-color: cyan;width: 300px;height: 100px">
+    hello {{name}}  hello {{name}} {{age}}  {{name}} {{name}}
   </div>
   <script src="./vue.js"></script>
   <script>
+
+    Vue.mixin({
+      created(){
+        console.log("created1");
+      }
+    })
+
+    Vue.mixin({
+      created(){
+        console.log("created2");
+      }
+    })
+    console.log(Vue.options);
+
     const vm = new Vue({
       el:'#app',
       data:{
         name:'vue2',
         age:399,
         hobby:['eat', 'drink', {a:1}]
+      },
+      created(){
+        console.log("created3");
       }
     })
+
+    //   vm.name = 'foffffffffooo'
+    //   vm.name = 'ttt'
+    //   vm.name = 'ppppp'
+    //   vm.age="99999"
+    // vm.$nextTick(() => {
+    //   let app = document.querySelector('#app')
+    //   console.log(app.innerHTML);
+    // })
+
   </script>
 </body>
 </html>

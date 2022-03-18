@@ -27,21 +27,42 @@
   </style>
 </head>
 <body>
-  <div id="app" style="background-color: cyan;width: 300px;height: 100px;"><div style="color: red;">
-    hello {{name}}  hello {{name}}
-    </div>
-    <span>hello aaa{{age}}</span>
+  <div id="app">
+    {{full}} {{full}} {{full}}
   </div>
   <script src="./vue.js"></script>
   <script>
+
+
+    let a = 1
     const vm = new Vue({
       el:'#app',
       data:{
         name:'vue2',
-        age:399,
+        age:"399",
         hobby:['eat', 'drink', {a:1}]
+      },
+      computed:{
+        full(){
+          return this.name + this.age
+        }
+      },
+      watch:{
+        age:{
+          immediate:true,
+          handler(news, old){
+            
+            console.log(news, old, 'watch watch', a++);
+          }
+        }
       }
     })
+
+    this.setTimeout(() => {
+      vm.age = "88888888"
+    }, 2000)
+
+
   </script>
 </body>
 </html>

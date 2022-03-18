@@ -1,51 +1,16 @@
+import Watcher from "./observe/watcher"
 import { createElementVNode, createTextVNode } from "./vdom"
+import { patch } from "./vdom/patch"
 
-function createElm(vnode) {
-  let {tag, data, children, text} = vnode
-  if (typeof tag === 'string') {
-    vnode.el = document.createElement(tag)
 
-    patchProps(vnode.el, data)
-
-    children.forEach(child => {
-      vnode.el.appendChild(createElm(child))
-    })
-  }else{
-    vnode.el = document.createTextNode(text)
-  }
-  return vnode.el
-}
-function patchProps(el, props) {
-  for(let key in props){
-    if (key === 'style') {
-      for(let styleName in props.style){
-        el.style[styleName] = props.style[styleName]
-      }
-    } else {
-      el.setAttribute(key, props[key])
-    }
-  }
-}
-
-function patch(oldVnode, vnode) {
-  //写的是初渲染流程
-  const isRealElement = oldVnode.nodeType
-  if (isRealElement) {
-    const elm = oldVnode
-    const parentElm = elm.parentNode //拿到父元素
-    let newElm = createElm(vnode)
-    parentElm.insertBefore(newElm, elm.nextSibiling)
-    parentElm.removeChild(elm)
-  }
-}
 
 export function initLifeCycle(Vue) {
   Vue.prototype._update = function (vnode) {
     const vm = this
     const el = vm.$el
-    console.log(el, vnode);
     //patch既有初始化的功能 又有更新的公共
-    patch(el, vnode)
+    const newEl = patch(el, vnode)
+    vm.$el = newEl
   }
 
   Vue.prototype._c = function () {
@@ -68,7 +33,12 @@ export function initLifeCycle(Vue) {
 export function mountComponent(vm, el) {
   vm.$el = el
   //1.调用render方法产生虚拟节点 虚拟Dom
-  vm._update(vm._render()) 
+
+  const updateComponent = () => {
+    vm._update(vm._render())
+  }
+
+  new Watcher(vm, updateComponent, true)
   //2.根据虚拟DOM产生真实DOM
 
   //3.插入到el元素中
@@ -85,3 +55,11 @@ export function mountComponent(vm, el) {
  * 5. render函数会生成虚拟DOm
  * 6. 根据生成的虚拟节点创造真实的DOM
  */
+
+
+export function callHook(vm, hook) {
+  const handlers = vm.$options[hook]
+  if (handlers) {
+    handlers.forEach(handler => handler.call(vm))
+  }
+}
